@@ -5,28 +5,30 @@
       <h1>Результаты студентов</h1>
       <preloader-block v-if="showPreloader"/>
       <ul v-else class="block-group">
-        <li
-            v-for="test of testsResults"
+        <li class="block-group__li"
+            v-for="test of dataResult"
             :key="test.index"
         >
-          {{test.name}}
-          <div class="block-i" @click="showGroup(test)">
+          <p>{{test.test.testName}}</p>
+          <div class="block-i i-test" @click="showGroup(test)">
             <i class="arrow down" :class="{up: test.visible}">
             </i>
           </div>
 
           <ul class="block-list" v-if="test.visible">
 
-            <li v-for="group of test.group" :key="group.index">{{group.title}}
-              <div class="block-i" @click="showList(group)">
+            <li v-for="group of test.studentGroups" :key="group.index">
+              <p>{{group.groupName}}</p>
+              <p class="block-list__text">средняя оценка по группе:</p>
+              <p class="block-list__average">{{getAverageRating(group)}}</p>
+              <div class="block-i i-group" @click="showList(group)">
                 <i class="arrow down" :class="{up: group.visible}" ></i>
               </div>
-              <p class="block-list__text">средняя оценка по группе:</p>
-              <p class="block-list__average">{{group.averageRating}}</p>
 
               <ul class="block-list" v-if="group.visible">
-                <li v-for="student of group.student" :key="student.index">{{student.name}}
-                  <p class="block-list__average-student">{{student.studentRating}}</p></li>
+                <li v-for="student of group.students" :key="student.index">
+                 <p class="block-list__student">{{student.student.user.lastName}} {{student.student.user.firstName}} {{student.student.user.midletName}}</p>
+                  <p class="block-list__average-student">{{getResult(student.result, test.maxScoreByTest)}}</p></li>
               </ul>
 
             </li>
@@ -557,11 +559,13 @@ export default {
     }
   },
   methods: {
+    // Остановка прелоадера
     closePreloder() {
       setTimeout(() => (
           this.showPreloader = false
       ), 700);
     },
+    // Показ/скрытие групп
     showGroup(item) {
       if (item.visible === false) {
         return item.visible = true
@@ -570,6 +574,7 @@ export default {
         return item.visible = false
       }
     },
+    // Показ/скрытие студентов
     showList(group) {
       if (group.visible === false) {
         return group.visible = true
@@ -577,24 +582,38 @@ export default {
       if (group.visible === true) {
         return group.visible = false
       }
+    },
+    // Получение оценки студента
+    getResult(item, max) {
+      if (item === null) {
+        return "Не пройден"
+      } else {
+        return item.scoreByTest + ' / ' + max
+      }
+    },
+    // Вычисление средний оценки группы
+    getAverageRating(g) {
+      let result = 0
+      let i = 0
+      for (let arr of g.students) {
+        if (arr.result !== null) {
+          result = arr.result.scoreByTest + result
+          i = i + 1
+        }
+      }
+      if (i === 0) {
+          return 'Тест не пройден'
+      }
+      else {
+      return result / i
+      }
     }
   },
   async created() {
     // получаем sessionId из localStorage
     this.sessionId = JSON.parse(localStorage.getItem('sessionId'))
-    // получаем данные о пользователе
-    await fetch(`auth/sessionId?sessionId=${this.sessionId}`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-        .then(response => response.json())
-        .then(data => {
-          this.dataUser = data; console.log(this.dataUser.id)
-        });
     // Получаем данные результатов
-    await fetch(`/result/teacherId?teacherId=${this.dataUser.id}&sessionId=${this.sessionId}`, {
+    await fetch(`/result/groups?sessionId=${this.sessionId}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
@@ -604,6 +623,12 @@ export default {
         .then(data => {
            this.dataResult = data; console.log(this.dataResult)
         });
+    for(let item of this.dataResult) {
+      item.visible = false
+      for (let arr of item.studentGroups) {
+        arr.visible = false
+      }
+    }
 
   },
   mounted() {
@@ -637,6 +662,15 @@ li{
   margin-bottom: 16px;
   position: relative;
 }
+.block-group__li{
+  display: flex;
+  width: 58%;
+  justify-content: left;
+  flex-wrap: wrap;
+}
+p{
+  margin: 0;
+}
 i {
   border: solid black;
   border-width: 0 3px 3px 0;
@@ -649,11 +683,13 @@ i {
   -webkit-transform: rotate(45deg);
 }
 .block-group{
-  margin: 0 0 0 40%;
   cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .block-list{
-  margin-left: 40px;
+  margin: 15px 0 0 50px;
   cursor: default;
   width: 100%;
 }
@@ -664,9 +700,15 @@ i {
 }
 .block-i{
   position: absolute;
-  top: 2px;
-  padding-left: 88px;
   cursor: pointer;
+}
+.i-test{
+  padding-left: 73%;
+  top: 2px;
+}
+.i-group{
+  padding-right: 83%;
+  right: 127px;
 }
 .block-list__text{
   font-weight: 600;
@@ -678,9 +720,12 @@ i {
 .block-list__average-student,
 .block-list__average{
   font-weight: 600;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 31px;
   color: #26AF11;
+}
+.block-list__student{
+  font-size: 19px;
 }
 .block-list__average{
   margin: -4px 0 0 25px;

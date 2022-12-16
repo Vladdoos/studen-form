@@ -9,7 +9,7 @@
           <li class="result-li" v-for="test of dataTest" :key="test.index">
             <p>{{test.test.testName}}</p>
             <p class="block-result__p">оценка за тест</p>
-            <p class="block-result__rating">{{test.scoreByTest}} / 100</p>
+            <p class="block-result__rating">{{test.scoreByTest}} / {{test.maxTestScores}}</p>
             <button @click="showBlock(test)">{{test.visible ? 'Скрыть результаты' : 'Показать результаты'}}</button>
 
             <ul class="block-result__ul" v-if="test.visible">
@@ -35,64 +35,11 @@ export default {
     return {
       dataTest: [],
       showPreloader: true,
-      studentResult: [
-        {
-          title: 'Проектирование информационных систем',
-          visible: false,
-          textBtn: 'Показать результаты',
-          averageRating: '5',
-          questions: [
-            {name: 'Вопрос 1', questionRating: 1},
-            {name: 'Вопрос 2', questionRating: 2},
-            {name: 'Вопрос 3', questionRating: 1},
-            {name: 'Вопрос 4', questionRating: 0},
-            {name: 'Вопрос 5', questionRating: 2},
-            {name: 'Вопрос 6', questionRating: 1},
-            {name: 'Вопрос 7', questionRating: 0},
-            {name: 'Вопрос 8', questionRating: 1},
-            {name: 'Вопрос 9', questionRating: 2},
-            {name: 'Вопрос 10', questionRating: 0},
-          ]
-        },
-        {title: 'Компьютерная математика',
-          visible: false,
-          textBtn: 'Показать результаты',
-          averageRating: '4',
-          questions: [
-            {name: 'Вопрос 1', questionRating: 1},
-            {name: 'Вопрос 2', questionRating: 2},
-            {name: 'Вопрос 3', questionRating: 1},
-            {name: 'Вопрос 4', questionRating: 0},
-            {name: 'Вопрос 5', questionRating: 2},
-            {name: 'Вопрос 6', questionRating: 1},
-            {name: 'Вопрос 7', questionRating: 0},
-            {name: 'Вопрос 8', questionRating: 1},
-            {name: 'Вопрос 9', questionRating: 2},
-            {name: 'Вопрос 10', questionRating: 0},
-          ]
-        },
-        {title: 'Теория информации, данные, знания',
-          visible: false,
-          textBtn: 'Показать результаты',
-          averageRating: '3',
-          questions: [
-            {name: 'Вопрос 1', questionRating: 1},
-            {name: 'Вопрос 2', questionRating: 2},
-            {name: 'Вопрос 3', questionRating: 1},
-            {name: 'Вопрос 4', questionRating: 0},
-            {name: 'Вопрос 5', questionRating: 2},
-            {name: 'Вопрос 6', questionRating: 1},
-            {name: 'Вопрос 7', questionRating: 0},
-            {name: 'Вопрос 8', questionRating: 1},
-            {name: 'Вопрос 9', questionRating: 2},
-            {name: 'Вопрос 10', questionRating: 0},
-          ]
-        },
-      ],
-
+      maxScores: ''
     }
   },
   methods: {
+    // Скрыть/показать результаты
     showBlock(test) {
       if (test.visible === false) {
         return test.visible = true
@@ -107,7 +54,7 @@ export default {
       setTimeout(() => (
           this.showPreloader = false
       ), 700);
-    }
+    },
   },
   async created() {
     this.sessionId = JSON.parse(localStorage.getItem('sessionId'))
@@ -118,14 +65,22 @@ export default {
       },
     })
         .then(response => response.json())
-        .then(data => { this.dataTest = data;});
+        .then(data => { this.dataTest = data; console.log(this.dataTest)});
     for(let item of this.dataTest) {
       item.visible = false
+    }
+    for(let arr of this.dataTest) {
+      let sum = 0
+      for(let item of arr.answerResults) {
+        sum = item.question.maxScores + sum
+      }
+      arr.maxTestScores = sum
     }
   },
   mounted() {
     this.closePreloder()
   },
+
 }
 </script>
 
