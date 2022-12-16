@@ -5,20 +5,21 @@
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Команда запуска локального сервера
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Структура проекта
+### Входная точка
+Входная точка в приложение (файл, в котором инстанцируется корневой компонент vue) - **main.js** (src/main.js).
+Корневой компонент vue - **App.vue** (src/App.vue)
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Компоненты
+Все компоненты системы находятся в директории src/components:
+- **rootComponents** - компонент страницы
+- **unitComponents** - компоненты составных частей страницы
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+###Версии
+
+Разработка велась на node v14.15.4 и cli 5.0.8
