@@ -57,7 +57,7 @@
               v-for="(option, index) in group"
               :value="option.value"
               :key="index"
-          >Д-Э 123</option>
+          >{{option.text}}</option>
         </select>
         <p>Выберите тест:</p>
         <select class="select-grade"  v-model="selectedGrade">
@@ -69,7 +69,7 @@
         </select>
         <button @click="visible.value3 = !visible.value3">{{visible.value3 ? 'Скрыть' : 'Показать'}}</button>
       </div>
-      <p v-if="visible.value3" class="text-analitics">Абсолютная успеваемость группы Д-Э 123 равна <span>72,5</span></p>
+      <p v-if="visible.value3" class="text-analitics">Абсолютная успеваемость группы Д-Э 121 равна <span>72,5</span></p>
 
       <h2>4. Качественная успеваемость по каждой группе</h2>
       <div class="analytic-block--options">
@@ -79,7 +79,7 @@
               v-for="(option, index) in group"
               :value="option.value"
               :key="index"
-          >Д-Э 123</option>
+          >{{option.text}}</option>
         </select>
         <p>Выберите тест:</p>
         <select class="select-grade"  v-model="selectedGrade">
@@ -91,7 +91,7 @@
         </select>
         <button @click="visible.value4 = !visible.value4">{{visible.value4 ? 'Скрыть' : 'Показать'}}</button>
       </div>
-      <p v-if="visible.value4" class="text-analitics">Качественная успеваемость группы Д-Э 123 равна <span>50.0</span></p>
+      <p v-if="visible.value4" class="text-analitics">Качественная успеваемость группы Д-Э 121 равна <span>50.0</span></p>
 
       <h2>5. Мода группы:</h2>
       <div class="analytic-block--options">
@@ -122,7 +122,7 @@
               v-for="(option, index) in group"
               :value="option.value"
               :key="index"
-          >Д-Э 122</option>
+          >{{option.text}}</option>
         </select>
         <p>Выберите тест:</p>
         <select class="select-grade"  v-model="selectedGrade">
@@ -134,7 +134,7 @@
         </select>
         <button @click="visible.value6 = !visible.value6">{{visible.value6 ? 'Скрыть' : 'Показать'}}</button>
       </div>
-      <p v-if="visible.value6" class="text-analitics">Медиана группы Д-Э 122 равна <span>3.5</span></p>
+      <p v-if="visible.value6" class="text-analitics">Медиана группы Д-Э 121 равна <span>3.5</span></p>
 
       <h2>7. Средний балл для каждой группы.</h2>
       <div class="analytic-block--options">
@@ -144,7 +144,7 @@
               v-for="(option, index) in group"
               :value="option.value"
               :key="index"
-          >Д-Э 121</option>
+          >{{option.text}}</option>
         </select>
         <p>Выберите тест:</p>
         <select class="select-grade"  v-model="selectedGrade">
@@ -166,7 +166,7 @@
               v-for="(option, index) in group"
               :value="option.value"
               :key="index"
-          >Д-Э 124</option>
+          >{{option.text}}</option>
         </select>
         <p>Выберите тест:</p>
         <select class="select-grade"  v-model="selectedGrade">
@@ -178,7 +178,7 @@
         </select>
         <button @click="visible.value8 = !visible.value8">{{visible.value8 ? 'Скрыть' : 'Показать'}}</button>
       </div>
-      <p v-if="visible.value8" class="text-analitics">Размах вариации для группы Д-Э 124 равен <span>3</span></p>
+      <p v-if="visible.value8" class="text-analitics">Размах вариации для группы Д-Э 121 равен <span>3</span></p>
 
       <h2>9.	Дисперсия</h2>
       <div class="analytic-block--options">
