@@ -118,7 +118,7 @@ export default {
     })
         .then(response => response.json())
         .then(data => {
-           this.dataResult = data; console.log(this.dataResult)
+           this.dataResult = data;
         });
     for(let item of this.dataResult) {
       item.visible = false

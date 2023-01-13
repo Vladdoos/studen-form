@@ -71,16 +71,11 @@ export default {
     //Добавление ответа и id в массив
     getArrAnswers(el) {
       if (this.userAnswers.length === this.show) {
-        this.userAnswers.push({id: el, answer: this.testAnswer})
-        console.log(this.userAnswers)
-        return
-
+        return this.userAnswers.push({id: el, answer: this.testAnswer})
       }
       if (this.userAnswers.length > this.show) {
         this.userAnswers.splice(this.show, 1, {id: el, answer: this.testAnswer})
-         this.testAnswer = this.userAnswers[this.show].answer
-        console.log(this.userAnswers)
-        console.log(this.testAnswer)
+        return this.testAnswer = this.userAnswers[this.show].answer
       }
 
 

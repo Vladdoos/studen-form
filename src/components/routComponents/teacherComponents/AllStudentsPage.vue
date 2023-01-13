@@ -39,7 +39,6 @@ export default {
   methods: {
     showList(item) {
       if (item.visible === false) {
-        console.log('hi')
         return item.visible = true
       }
       if (item.visible === true) {

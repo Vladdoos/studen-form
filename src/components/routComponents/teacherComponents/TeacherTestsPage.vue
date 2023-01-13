@@ -221,7 +221,6 @@ export default {
     })
         .then(response => response.json())
         .then(data => {return this.dataGroup = data});
-    console.log(this.dataGroup)
     this.dataGroup.push({id: 'allGroup', groupName: 'Всем группам'})
   },
   mounted() {
