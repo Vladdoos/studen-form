@@ -12,7 +12,7 @@
           <h2>{{questions.questionValue}}</h2>
 
           <ul class="block-ul">
-            <li class="block-ul__li" v-for="(answer, index) of questions.answers" :key="index">
+            <li class="block-ul__li" v-for="(answer, index) of questions.answers" :key="index" >
               <input
                   type="radio"
                   class="checkbox"
@@ -20,8 +20,10 @@
                   :id="answer.value"
                   :value="answer.value"
                   v-model="testAnswer"
+                  @change="this.getArrAnswers(questions.id)"
+
               >
-              <label :for="answer.value">{{answer.value}}</label>
+              <label  :for="answer.value">{{answer.value}}</label>
             </li>
             <div class="block-btn">
               <button v-if="!actives"
@@ -31,7 +33,7 @@
                       :class="{'btn-style': this.show === 0}"
               >{{textBtnPrev}}</button>
               <button v-if="!actives"
-                      @click.left="pushAnswer(questions, index)"
+                      @click.left="pushAnswer()"
                       class="btn-next"
               >{{textBtnNext}}</button>
             </div>
@@ -67,26 +69,32 @@ export default {
   },
   methods: {
     //Добавление ответа и id в массив
-    getArrAnswers(el, i) {
-      if (this.userAnswers.length === i) {
-        this.userAnswers.push({id: el.id, answer: this.testAnswer})
-        return this.testAnswer = ''
+    getArrAnswers(el) {
+      if (this.userAnswers.length === this.show) {
+        this.userAnswers.push({id: el, answer: this.testAnswer})
+        console.log(this.userAnswers)
+        return
+
       }
-      if (this.userAnswers.length > i) {
-        this.userAnswers.splice(i, 1, {id: el.id, answer: this.testAnswer})
-        return this.testAnswer = this.userAnswers[this.show].answer
+      if (this.userAnswers.length > this.show) {
+        this.userAnswers.splice(this.show, 1, {id: el, answer: this.testAnswer})
+         this.testAnswer = this.userAnswers[this.show].answer
+        console.log(this.userAnswers)
+        console.log(this.testAnswer)
       }
+
+
     },
     // Листание вперед
     // Отправка теста на сервер
-    pushAnswer(el, i) {
+    pushAnswer() {
       if((this.show + 1) < this.dataTest.questions.length) {
         this.show++
-        this.getArrAnswers(el, i)
         this.disabled = false
+        this.getPrevValue()
         if ((this.show + 1) === this.dataTest.questions.length) {
           this.textBtnNext = 'Завершить тест'
-          this.getArrAnswers(el, i)
+          this.getPrevValue()
         }
       }
       else {
@@ -108,7 +116,9 @@ export default {
     },
     // Получение предыдущих ответов
     getPrevValue() {
-      this.testAnswer = this.userAnswers[this.show].answer
+      if (this.userAnswers[this.show]?.answer.length) {
+        return this.testAnswer = this.userAnswers[this.show].answer
+      }
     },
     // Листание назад
     prevAnswer() {
