@@ -4,7 +4,8 @@
     <div class="container-testing">
       <h1>Тестирование</h1>
       <preloader-block class="preloader" v-if="showPreloader"/>
-      <div v-else class="block-tests">
+      <p v-if="showPreloader === false && dataTest.length === 0">Нет доступных тестов</p>
+      <div v-if="showPreloader === false && dataTest.length > 0" class="block-tests">
         <ul>
           <li v-for="item of dataTest" :key="item.index">
             <p>{{item.testName}}</p>
@@ -32,26 +33,19 @@ export default {
       showPreloader: true
     }
   },
-  methods: {
-    closePreloder() {
-      setTimeout(() => (
-          this.showPreloader = false
-      ), 700);
-    }
-  },
-  mounted() {
-    this.closePreloder()
-  },
-  created() {
-    this.sessionId = JSON.parse(localStorage.getItem('sessionId'))
-    fetch(`/test?sessionId=${this.sessionId}`, {
+  async created() {
+    this.sessionId = await JSON.parse(localStorage.getItem('sessionId'))
+    await fetch(`/test?sessionId=${this.sessionId}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
       },
     })
         .then(response => response.json())
-        .then(data => {this.dataTest = data;});
+        .then(data => {
+          this.dataTest = data;
+        });
+    this.showPreloader = false
   },
 }
 </script>
@@ -59,6 +53,11 @@ export default {
 <style scoped>
 .container-testing{
   padding: 0 80px;
+}
+p{
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
 }
 h1{
   font-weight: 600;

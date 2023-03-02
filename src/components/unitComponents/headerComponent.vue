@@ -74,4 +74,7 @@ li{
 .head-block li{
   margin-right: 120px;
 }
+a:hover{
+  color: #95ff84;
+}
 </style>

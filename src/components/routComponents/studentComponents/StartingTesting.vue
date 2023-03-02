@@ -2,7 +2,7 @@
 <div class="container-testing">
   <h1>Тестирование</h1>
   <preloader-block class="preloader" v-if="showPreloader"/>
-  <div v-else class="block-tests">
+  <div v-if="!showPreloader" class="block-tests">
     <div class="form" >
       <ul class="invisibleUl"
           :class="{visibleUl: index === show}"
@@ -126,12 +126,6 @@ export default {
         this.getPrevValue()
       }
     },
-    // Скрыть прелоадер
-    closePreloder() {
-      setTimeout(() => (
-          this.showPreloader = false
-      ), 700);
-    }
   },
   created() {
     // Получение id теста
@@ -146,9 +140,7 @@ export default {
     })
         .then(response => response.json())
         .then(data => {this.dataTest = data;});
-  },
-  mounted() {
-    this.closePreloder()
+    this.showPreloader = false
   },
 }
 </script>

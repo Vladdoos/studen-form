@@ -4,10 +4,11 @@
     <div class="container-allResult">
       <h1>Мои результаты</h1>
       <preloader-block class="preloader" v-if="showPreloader"/>
-      <div v-else class="block-result">
+      <p v-if="showPreloader === false && dataTest.length === 0">Нет результатов</p>
+      <div v-if="showPreloader === false && dataTest.length > 0" class="block-result">
         <ul>
           <li class="result-li" v-for="test of dataTest" :key="test.index">
-            <p>{{test.test.testName}}</p>
+            <p class="block-result__title">{{test.test.testName}}</p>
             <p class="block-result__p">оценка за тест</p>
             <p class="block-result__rating">{{test.scoreByTest}} / {{test.maxTestScores}}</p>
             <button @click="showBlock(test)">{{test.visible ? 'Скрыть результаты' : 'Показать результаты'}}</button>
@@ -49,15 +50,9 @@ export default {
         return test.visible = false
       }
     },
-    //Скрыть прелоадер
-    closePreloder() {
-      setTimeout(() => (
-          this.showPreloader = false
-      ), 700);
-    },
   },
   async created() {
-    this.sessionId = JSON.parse(localStorage.getItem('sessionId'))
+    this.sessionId = await JSON.parse(localStorage.getItem('sessionId'))
     await fetch(`/result/myself?sessionId=${this.sessionId}`, {
       method: "GET",
       headers: {
@@ -66,19 +61,19 @@ export default {
     })
         .then(response => response.json())
         .then(data => { this.dataTest = data});
-    for(let item of this.dataTest) {
-      item.visible = false
-    }
-    for(let arr of this.dataTest) {
-      let sum = 0
-      for(let item of arr.answerResults) {
-        sum = item.question.maxScores + sum
+    if (this.dataTest.length > 0) {
+      for(let item of this.dataTest) {
+        item.visible = false
       }
-      arr.maxTestScores = sum
+      for(let arr of this.dataTest) {
+        let sum = 0
+        for(let item of arr.answerResults) {
+          sum = item.question.maxScores + sum
+        }
+        arr.maxTestScores = sum
+      }
     }
-  },
-  mounted() {
-    this.closePreloder()
+    this.showPreloader = false
   },
 
 }
@@ -172,5 +167,13 @@ button:hover{
   width: 80%;
   justify-content: right;
   text-align: right;
+}
+.block-result__title{
+  width: 46%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

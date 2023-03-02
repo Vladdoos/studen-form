@@ -106,8 +106,8 @@ export default {
     //Показ Модального окна
     // Отправка данных на сервер
     async submitFile() {
+      this.showPreloader = true
       this.parsingFile = JSON.parse(this.parsingFile)
-      this.isShowModal = true
       await fetch(`test?sessionId=${this.sessionId}`, {
         method: "POST",
         headers: {
@@ -123,6 +123,8 @@ export default {
           .catch(error => {
             console.log(error);
           });
+      this.showPreloader = false
+      this.isShowModal = true
       document.querySelector('input[type=file]').value = '';
       this.nameTest = ''
       await this.getTest()
@@ -192,12 +194,6 @@ export default {
       })
        await this.getTest()
     },
-    //Закрыть прелоадер
-    closePreloder() {
-      setTimeout(() => (
-          this.showPreloader = false
-      ), 700);
-    },
   },
   async created() {
     // получаем sessionId из localStorage
@@ -222,10 +218,8 @@ export default {
         .then(response => response.json())
         .then(data => {return this.dataGroup = data});
     this.dataGroup.push({id: 'allGroup', groupName: 'Всем группам'})
-  },
-  mounted() {
-    this.closePreloder()
-  },
+    this.showPreloader = false
+  }
 }
 </script>
 

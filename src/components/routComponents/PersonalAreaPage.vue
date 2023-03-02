@@ -55,19 +55,9 @@ export default {
       showPreloader: true
     }
   },
-  methods: {
-    closePreloder() {
-      setTimeout(() => (
-         this.showPreloader = false
-      ), 700);
-    }
-  },
-  mounted() {
-    this.closePreloder()
-  },
-  created() {
-    this.sessionId = JSON.parse(localStorage.getItem('sessionId'))
-    fetch(`auth/sessionId?sessionId=${this.sessionId}`, {
+  async created() {
+    this.sessionId = await JSON.parse(localStorage.getItem('sessionId'))
+    await fetch(`auth/sessionId?sessionId=${this.sessionId}`, {
         method: "POST",
             headers: {
           'Content-Type': 'application/json',
@@ -75,6 +65,7 @@ export default {
     })
         .then(response => response.json())
         .then(data => {return this.dataUser = data});
+    this.showPreloader = false
   },
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
@@ -114,13 +105,14 @@ h1{
 .photo{
   width: 249px;
   height: 300px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.25), 0px 10px 6px rgba(0, 0, 0, 0.25);
 }
 .photo img{
   height: 100%;
-  left: 122px;
-  top: 260px;
-  box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.25), 0px 10px 6px rgba(0, 0, 0, 0.25);
-  border-radius: 50%;
 }
 .dateUser{
   margin-left: 121px;

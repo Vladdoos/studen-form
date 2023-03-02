@@ -1,4 +1,4 @@
-# studen-form
+# Student-form
 
 ## Project setup
 ```

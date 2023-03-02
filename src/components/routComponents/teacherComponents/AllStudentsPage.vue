@@ -45,14 +45,6 @@ export default {
         return item.visible = false
       }
     },
-    closePreloder() {
-      setTimeout(() => (
-          this.showPreloader = false
-      ), 700);
-    }
-  },
-  mounted() {
-    this.closePreloder()
   },
   async created() {
     this.sessionId = JSON.parse(localStorage.getItem('sessionId'))
@@ -75,6 +67,7 @@ export default {
     for(let item of this.dataGroup) {
       item.visible = false
     }
+    this.showPreloader = false
   },
 }
 </script>

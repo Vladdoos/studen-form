@@ -4,12 +4,13 @@
     <div class="container-allResult">
       <h1>Результаты студентов</h1>
       <preloader-block v-if="showPreloader"/>
-      <ul v-else class="block-group">
+      <p v-if="showPreloader === false && dataResult.length === 0">Нет результатов</p>
+      <ul v-if="showPreloader === false && dataResult.length > 0" class="block-group">
         <li class="block-group__li"
             v-for="test of dataResult"
             :key="test.index"
         >
-          <p>{{test.test.testName}}</p>
+          <p class="block-group__title">{{test.test.testName}}</p>
           <div class="block-i i-test" @click="showGroup(test)">
             <i class="arrow down" :class="{up: test.visible}"></i>
           </div>
@@ -53,12 +54,6 @@ export default {
     }
   },
   methods: {
-    // Остановка прелоадера
-    closePreloder() {
-      setTimeout(() => (
-          this.showPreloader = false
-      ), 700);
-    },
     // Показ/скрытие групп
     showGroup(item) {
       if (item.visible === false) {
@@ -85,9 +80,6 @@ export default {
         return item.scoreByTest + ' / ' + max
       }
     },
-    getTestMet() {
-
-    },
     // Вычисление средний оценки группы
     getAverageRating(g) {
       let result = 0
@@ -102,7 +94,7 @@ export default {
           return 'Тест не пройден'
       }
       else {
-      return result / i
+      return Math.round(result / i)
       }
     }
   },
@@ -126,10 +118,8 @@ export default {
         arr.visible = false
       }
     }
+    this.showPreloader = false
 
-  },
-  mounted() {
-    this.closePreloder()
   },
 }
 </script>
@@ -137,6 +127,11 @@ export default {
 <style scoped>
 .container-allResult{
   padding: 0 80px;
+}
+p{
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
 }
 h1{
   font-weight: 600;
@@ -236,5 +231,8 @@ i {
 .block-group__text{
   cursor: pointer;
   display: flex;
+}
+.block-group__title{
+  width: 79%;
 }
 </style>

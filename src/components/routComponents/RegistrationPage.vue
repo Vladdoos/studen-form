@@ -237,7 +237,7 @@ export default {
           })
         })
             .then(response => response.json())
-            .then(data => {console.log(data); this.visibleSuccess = true})
+            .then(data => {console.log(data); this.visibleSuccess = true; window.location = '/auth'})
             .catch(error => {
               console.log(error);
             });

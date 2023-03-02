@@ -51,16 +51,6 @@ export default {
       showPreloader: true
     }
   },
-  methods: {
-    closePreloder() {
-      setTimeout(() => (
-          this.showPreloader = false
-      ), 700);
-    }
-  },
-  mounted() {
-    this.closePreloder()
-  },
   async created() {
     // получаем sessionId из localStorage
     this.sessionId = JSON.parse(localStorage.getItem('sessionId'))
@@ -82,6 +72,7 @@ export default {
     })
         .then(response => response.json())
         .then(data => {return this.dataGroup = data});
+    this.showPreloader = false
   },
 }
 </script>
@@ -125,17 +116,14 @@ p{
   margin: 0 0 5px;
 }
 .photo{
-  width: 249px;
-  height: 300px;
-  margin: auto 0;
-}
-.photo img{
-  height: 80%;
-  left: 122px;
-  top: 260px;
-  box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.25), 0px 10px 6px rgba(0, 0, 0, 0.25);
+  width: 220px;
+  height: 260px;
+  margin: auto 15px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0px 20px 30px rgb(0 0 0 / 25%), 0px 10px 6px rgb(0 0 0 / 25%);
   border-radius: 50%;
-  margin-top: 20px;
+  overflow: hidden;
 }
 .form-text{
   padding-top: 15px;
